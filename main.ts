@@ -41,15 +41,20 @@ class Observer {
     }
 
     async observe() {
-        while (!await isOnStop(config.stops[this.current_stop], this.id)) {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, "0");
-            const minutes = now.getMinutes().toString().padStart(2, "0");
+        try {
+            while (!await isOnStop(config.stops[this.current_stop], this.id)) {
+                const now = new Date();
+                const hours = now.getHours().toString().padStart(2, "0");
+                const minutes = now.getMinutes().toString().padStart(2, "0");
 
-            await Deno.writeTextFile(`${config.dir}/${this.id}.csv`, `${hours}:${minutes},${this.current_stop}\n`, { append: true });
-            this.current_stop++;
-            if (this.current_stop >= config.stops.length) clearInterval(this.interval);
-            await sleep(100);
+                await Deno.writeTextFile(`${config.dir}/${this.id}.csv`, `${hours}:${minutes},${this.current_stop}\n`, { append: true });
+                this.current_stop++;
+                if (this.current_stop >= config.stops.length) clearInterval(this.interval);
+                await sleep(100);
+            }
+        } catch (e) {
+            console.error(`Bus ${this.id} encountered an exception when processing stop ${this.current_stop}.`);
+            console.error(e);
         }
     }
 }
