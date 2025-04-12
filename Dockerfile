@@ -1,7 +1,7 @@
 FROM denoland/deno:2.2.8
 
-WORKDIR /app
 USER deno
+WORKDIR /app
 
 COPY deno.json main.ts ./
 RUN deno cache main.ts
