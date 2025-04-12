@@ -47,7 +47,7 @@ class Observer {
                 const hours = now.getHours().toString().padStart(2, "0");
                 const minutes = now.getMinutes().toString().padStart(2, "0");
 
-                await Deno.writeTextFile(`${config.dir}/${this.id}.csv`, `${hours}:${minutes},${this.current_stop}\n`, { append: true });
+                await Deno.writeTextFile(`${config.dir}/${this.id}.csv`, `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')},${hours}:${minutes},${this.current_stop}\n`, { append: true });
                 this.current_stop++;
                 if (this.current_stop >= config.stops.length) clearInterval(this.interval);
                 await sleep(100);
